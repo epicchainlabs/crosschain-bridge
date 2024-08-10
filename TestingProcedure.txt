@@ -1,0 +1,93 @@
+Testing procedure: (For reference only)
+
+1. deploy MockNep5 contract, 0xf7d657c10ab725ae54f80230d93fc0317b8ee3e8, e8e38e7b31c03fd93002f854ae25b70ac157d6f7
+2. deploy MockCCMC contract, 0x3138e4609f20c8301c04dbbae30c12383e163a71, 713a163e38120ce3badb041c30c8209f60e43831
+3. deploy Nep5Proxy contract, 0x9c42dc9dea9e472cc8116278dd21725d3ced2704, 0427ed3c5d7221dd786211c82c479eea9ddc429c
+
+
+
+4. call "bindProxyHash" method of Nep5Proxy contract, params: 
+BigInteger: 2, to chain id
+little endian: ed53b14908f15918abb6ba8790a80387f8a5fd89, 0x89fda5f88703a89087bab6ab1859f10849b153ed, to chain proxy contract hash, AdQk428wVzpkHTxc4MP5UMdsgNdrm36dyV
+
+5. call "getProxyHash" method of Nep5Proxy contract to verify, params:
+BigInteger: 2, to chain id
+
+6. call "bindAssetHash" method of Nep5Proxy contract, params: ()
+little endian: ce30069177b5a6a172666800e325607ac0841826, neo nep5 asset hash
+BigInteger: 2, to chain id
+little endian: 5be5fc0641e44b0003262b3fda775ea60133cb05, to asset hash
+BigInteger: 100000000, asset limit
+Bool: false, is target chain asset
+
+7. call "getAssetHash" method of Nep5Proxy contract to verify, params:
+little endian: ce30069177b5a6a172666800e325607ac0841826, neo nep5 asset hash
+BigInteger: 2, to chain id
+
+8. call "getCrossedLimit" method of Nep5Proxy contract to verify, params:
+little endian: ce30069177b5a6a172666800e325607ac0841826, neo nep5 asset hash
+BigInteger: 2, to chain id
+
+9. call "lock" method of Nep5Proxy contract, params: 
+little endian: ce30069177b5a6a172666800e325607ac0841826, neo nep5 asset hash
+little endian: 651897dcd926ab80a2026eaf7f1aa451361d60d2, neo address AQzRMe3zyGS8W177xLJfewRRQZY2kddMun
+BigInteger: 2, to chain id
+little endian: 5392ebf880d9a7119b17b2f1adaebc5f71c28e75, to account address APPmjituYcgfNxjuQDy9vP73R2PmhFsYJR
+BigInteger: 10000
+
+10. call "getCrossedAmount" method of Nep5Proxy contract, params: 
+little endian: ce30069177b5a6a172666800e325607ac0841826, neo nep5 asset hash
+BigInteger: 2, to chain id
+
+11. check ApplicationLog using rpc
+
+
+
+12. call "callNeoProxy" of MockCCMC contract, params:
+BigInteger: 2, from chain id
+little endian: ed53b14908f15918abb6ba8790a80387f8a5fd89, from chain proxy contract hash AdQk428wVzpkHTxc4MP5UMdsgNdrm36dyV
+little endian: fe69c640b905ef4d40f65705af8e2eeb48395718, neo proxy hash
+little endian: 1431323334353132333435313233343531323334351466726f6d41646472657346726f6d416464726573fe404b4c00, inputbytes
+
+which will call "unlock" method of Nep5Proxy contract inside, params:
+little endian: 1431323334353132333435313233343531323334351466726f6d41646472657346726f6d416464726573fe404b4c00, inputbytes
+little endian: ed53b14908f15918abb6ba8790a80387f8a5fd89, from chain proxy contract hash AdQk428wVzpkHTxc4MP5UMdsgNdrm36dyV
+BigInteger: 2, from chain id
+
+
+
+
+"testSerialize", 
+e8e38e7b31c03fd93002f854ae25b70ac157d6f7, ed53b14908f15918abb6ba8790a80387f8a5fd89, 5000000
+
+14e8e38e7b31c03fd93002f854ae25b70ac157d6f714ed53b14908f15918abb6ba8790a80387f8a5fd89404b4c0000000000000000000000000000000000000000000000000000000000
+
+"testDynCall2"
+713a163e38120ce3badb041c30c8209f60e43831, 2, ed53b14908f15918abb6ba8790a80387f8a5fd89, "unlock", 1431323334353132333435313233343531323334351466726f6d41646472657346726f6d416464726573fe404b4c00
+
+
+
+Testing results recording:
+ccmc hash: 0xfa6e8ea58ff76c519500ef1ab7aa2c9d9df12e14
+neo proxy: 0x18573948eb2e8eaf0557f6404def05b940c669fe
+
+Step 5:
+VM State: HALT
+Gas Consumed: 0.26
+Evaluation Stack: [{"type":"ByteArray","value":"ed53b14908f15918abb6ba8790a80387f8a5fd89"}]
+
+Step 6: (6596)
+VM State: HALT
+Gas Consumed: 2.503
+Evaluation Stack: [{"type":"Integer","value":"1"}]
+
+Step 7:
+VM State: HALT
+Gas Consumed: 0.281
+Evaluation Stack: [{"type":"ByteArray","value":"5be5fc0641e44b0003262b3fda775ea60133cb05"}]
+
+Step 8:
+VM State: HALT
+Gas Consumed: 0.317
+Evaluation Stack: [{"type":"ByteArray","value":"00e1f505"}]
+
